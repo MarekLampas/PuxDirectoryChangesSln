@@ -1,0 +1,22 @@
+﻿@model DirectoryModel;
+@using PuxDirectoryChanges.Controllers;
+@{
+    ViewData["Title"] = "Select Directory";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Insert directory path to track changes <span data-toggle="tooltip" data-placement="right" title="Insert absolute path: C:\yourDir\yourDubdir or relative path: yourSubdir\yourSubsubdir" style="border-radius:10px; background-color:aquamarine;"><b>&#63;</b></span></p>
+    <form asp-controller="Home" method="post" asp-action="@nameof(HomeController.Changes)">
+        @Html.AntiForgeryToken()
+        <fieldset>
+            <div class="row">
+                <p>
+                    @Html.EditorFor(model => model.DirectoryPath, new { htmlAttributes = new { @class = "form-control", required = true, autocomplete="off", @style = "border-radius:20px;"} })
+                    @Html.ValidationMessageFor(model => model.DirectoryPath)
+                </p>
+                <p><input type="submit" class="btn btn-secondary btn-lg" style="width:40%; padding:10px; border-radius:20px;" value="Submit" /></p>
+            </div>
+        </fieldset>
+    </form>
+</div>

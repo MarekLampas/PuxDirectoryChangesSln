@@ -1,0 +1,43 @@
+﻿@using PuxDirectoryChanges.Controllers;
+@model ChangesModel;
+@{
+    ViewData["Title"] = "Directory changes";
+
+    ViewData["Headline"] = Model.FileStates.Count > 0 ? "Following files have been modified" : "No files have been modified";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Headline"]</h1>
+    <p><a type="button" class="btn btn-secondary" style="width:40%; padding:10px; border-radius:20px;" asp-controller="Home" asp-action="@nameof(HomeController.Index)">Change Directory</a> <a type="button" class="btn btn-secondary" style="width:40%; padding:10px; border-radius:20px;" asp-controller="Home" asp-action="@nameof(HomeController.Changes)">Run Scanner</a></p>
+    <div class="panel-group" id="accordion">
+        @foreach(var item in Model.FileStates){
+            @if (item.Value.Count() > 0)
+            {
+                var colapseHref = "#collapse" + ((int)item.Key).ToString();
+                var colapseId = "collapse" + ((int)item.Key).ToString();
+                <div class="panel panel-default">
+                    <a data-toggle="collapse" data-parent="#accordion" href="@colapseHref">
+                        <div class="panel-heading bg-transparent">
+                            <h4 class="panel-title">
+                                @item.Key.ToString() Files
+                            </h4>
+                        </div>
+                    </a>
+                    <div id="@colapseId" class="panel-collapse collapse">
+                        <div class="panel-body" style="text-align:left; padding-top:0px">
+                            <hr style="padding:0px; margin:0px"/>
+                            @foreach (var fileState in item.Value)
+                            {
+                                <p style="margin:0px; padding:5px 10px 0px 10px">[@fileState.State.ToString().Substring(0, 1)] @fileState.FilePath @if (fileState.State == PuxDirectoryChanges.Helpers.Enums.EState.Modified)
+                                    {
+                                        <text>(version @fileState.Version)</text>
+                                    }
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
